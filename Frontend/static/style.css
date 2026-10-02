@@ -618,3 +618,56 @@ button {
     color: #007173;
     text-align: center;
 }
+/* Hero: logo bar (50px) + icon and title fill exactly one screen */
+.cinemadiv {
+    height: calc(100vh - 50px);
+    height: calc(100svh - 50px);   /* mobile: ignores the browser's address bar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    box-sizing: border-box;
+    padding: 2vh 16px;
+}
+
+.cinemaimg {
+    padding-top: 0;
+    height: auto;
+    max-height: 65vh;             /* icon takes most of the screen */
+    max-width: 80vw;
+    object-fit: contain;
+}
+
+.heading {
+    margin: 0;
+    font-size: clamp(2.5rem, 7vh, 5rem);   /* title scales with screen height */
+    line-height: 1.1;
+}
+
+/* Hero: logo bar (50px) + icon and title fill exactly one screen */
+.cinemadiv {
+    height: calc(100vh - 50px);
+    height: calc(100svh - 50px);   /* mobile: ignores the browser's address bar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    box-sizing: border-box;
+    padding: 2vh 16px;
+}
+
+.cinemaimg {
+    padding-top: 0;
+    height: auto;
+    max-height: 65vh;             /* icon takes most of the screen */
+    max-width: 80vw;
+    object-fit: contain;
+}
+
+.heading {
+    margin: 0;
+    font-size: clamp(2.5rem, 7vh, 5rem);   /* title scales with screen height */
+    line-height: 1.1;
+}
