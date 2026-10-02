@@ -3,276 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoML</title>
-    <style>
-      .token.operator,
-        .token.punctuation {
-            background: none !important;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            width: 100%;
-            margin: 0;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        video {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        /* Define keyframes for colorful spinner rotation */
-        /* Define keyframes for colorful spinner rotation */
-        @keyframes spinner {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Style for the spinner */
-        .spinner {
-            border: 5px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #0B141B;
-            /* Change the colors as needed */
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spinner 1s linear infinite;
-            /* Apply rotation animation */
-        }
-
-        /* Container to center the spinner */
-        #loading-spinner {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
-
-        pre[class*="language-"] {
-            color: black; /* Text color */
-            background: black; /* Background color */
-            padding: 1em; /* Adjust padding as needed */
-            border-radius: 5px; /* Optional: Add border radius for rounded corners */
-            overflow-x: auto; /* Optional: Add horizontal scroll for long lines */
-            text-shadow: 0px;
-        }
-        
-        pre[class*="language-"] code[class*="language-"] {
-    color: white; /* Text color */
-    text-shadow: none; /* Remove text shadow */
-    background-color:black;
-}
-:not(pre) > code[class*="language-"],
-pre[class*="language-"],
-pre {
-    background: black !important;
-}
-
-pre[class*="language-"] code[class*="language-"] {
-    color: white;
-}
-
-    </style>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <!-- Include Prism.js CSS for syntax highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+    <title>ML Genie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Prism.js dark theme for the generated code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 
 <body>
-    <div class='logodiv'>
-        <img class='logoimg' src="./static/img/Unisys_logo_2022.png"></img>
-    </div>
-    <div class='cinemadiv'>
-        <img class='cinemaimg' src="./static/img/OIG1-removebg-preview.png"></img>
-        <h1 class='heading'>ML Genie</h1>
-    </div>
-    <div class='examplediv'>
-        <div class='left-side'>
-            <p class='text-head'>ML Genie</p>
-            <p class='para'>A solution for all your ML and Data Science related problems at one place</p>
-            <p class='example'>Look at the example </p><br />
-            <button class='getstarted' onclick="scrollToSection('loginsec')">Get Started</button>
-        </div>
-        <div class='right-side'>
-            <img class='vector' src="./static/img/Screenshot_2024-03-19_201001-removebg-preview.png"></img>
-        </div>
-    </div>
-    <div class='maindivuse'>
-        <h1>How Do I Use It?</h1>
-        <div class='contentdiv'>
-            <div class='sections3'>
-                <div class='sections3img'>
-                    <img class='backgnd' src="./static/img/splash.png"></img>
-                    <img class='icons' src="./static/img/upload - Copy.png"></img>
-                </div>
-                <div class='paragraph'>
-                    <h3>1.Upload your Data</h3>
-                    <p>Upload the dataset<br /> from your system <br />simple drag and drop</p>
-                </div>
+    {# The /set_target_column route passes these after an analysis; on first load they don't exist #}
+    {% set has_results = attributes is defined %}
+
+    <header class="cinemadiv">
+        <img class="cinemaimg" src="./static/img/OIG1-removebg-preview.png" alt="">
+        <h1 class="heading">ML Genie</h1>
+    </header>
+
+    <main>
+        <section class="examplediv">
+            <div class="left-side">
+                <p class="text-head">ML Genie</p>
+                <p class="para">A solution for all your ML and Data Science related problems at one place</p>
+                <p class="example">Upload a dataset to see it in action.</p>
+                <button type="button" class="getstarted" data-scroll-to="upload">Get Started</button>
             </div>
-            <div class='sections3'>
-                <div class='sections3img'>
-                    <img class='backgnd' src="./static/img/splash.png"></img>
-                    <img class='icons' src="./static/img/idea-analytics_11191273.png"></img>
-                </div>
-                <div class='paragraph'>
-                    <h3>2.Get some insights</h3>
-                    <p>Get insights on the<br />uploaded dataset <br />and the model used.</p>
-                </div>
+            <div class="right-side">
+                <img class="vector" src="./static/img/Screenshot_2024-03-19_201001-removebg-preview.png" alt="">
             </div>
-            <div class='sections3'>
-                <div class='sections3img'>
-                    <img class='backgnd' src="./static/img/splash.png"></img>
-                    <img class='icons' src="./static/img/data_1197460.png"></img>
-                </div>
-                <div class='paragraph'>
-                    <h3>3.The code is generated</h3>
-                    <p>The code for<br /> preprocessing and <br />training will be generated.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-  <div class='redbox'>
-        <form class="upl" action="/generate_dropdown" method="post" enctype="multipart/form-data">
-            <div class="drop-zone">
-                <span class="drop-zone__prompt">Drop CSV file here and click to upload</span>
-                <input type="file" name="file" accept=".csv" class="drop-zone__input"> <!-- Ensure name="file" -->
-            </div>
-            <button type="submit" class='uploadbtn'><img class='uploadlogo'
-                    src="./static/img/uploadcream - Copy.png"></img>
-                <h6>Upload</h6>
-            </button>
-        </form>
-        <form class="target-col" action="/set_target_column" method="post" onsubmit="return handleFormSubmission()">
-            <div class="dropdown">
-                <span style="font-size: 25px;">Select Target Column:</span>
-                <!-- Dropdown content -->
-                <select id="targetColumnDropdown" class="dropdown-content" name="target_column">
-                    <!-- Options will be added dynamically via JavaScript -->
+        </section>
+
+        <section class="maindivuse">
+            <h2>How Do I Use It?</h2>
+            <ol class="contentdiv">
+                <li class="sections3">
+                    <div class="sections3img">
+                        <img class="backgnd" src="./static/img/splash.png" alt="">
+                        <img class="icons" src="./static/img/upload - Copy.png" alt="">
+                    </div>
+                    <div class="paragraph">
+                        <h3>1. Upload your data</h3>
+                        <p>Drag and drop a CSV file from your computer.</p>
+                    </div>
+                </li>
+                <li class="sections3">
+                    <div class="sections3img">
+                        <img class="backgnd" src="./static/img/splash.png" alt="">
+                        <img class="icons" src="./static/img/idea-analytics_11191273.png" alt="">
+                    </div>
+                    <div class="paragraph">
+                        <h3>2. Get some insights</h3>
+                        <p>See how the data was prepared and which model fits it best.</p>
+                    </div>
+                </li>
+                <li class="sections3">
+                    <div class="sections3img">
+                        <img class="backgnd" src="./static/img/splash.png" alt="">
+                        <img class="icons" src="./static/img/data_1197460.png" alt="">
+                    </div>
+                    <div class="paragraph">
+                        <h3>3. Get the code</h3>
+                        <p>The code for preprocessing and training is generated for you.</p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Step 1 and 2: upload, then choose the target column -->
+        <section class="redbox" id="upload" aria-labelledby="upload-title">
+            <h2 class="panel-title" id="upload-title">Upload your dataset</h2>
+
+            {% if error %}
+            <p class="status is-error" id="analysis-error" role="alert">{{ error }}</p>
+            {% endif %}
+
+            <form class="upl" id="upload-form">
+                <label class="drop-zone" id="drop-zone" for="file-input">
+                    <input type="file" id="file-input" name="file" accept=".csv,text/csv" class="drop-zone__input">
+                    <img class="uploadlogo" src="./static/img/upload - Copy.png" alt="">
+                    <span class="drop-zone__prompt"><strong>Drop your CSV here</strong> or click to choose a file</span>
+                    <span class="drop-zone__hint">CSV files up to 20 MB, with column names in the first row</span>
+                    <span class="drop-zone__file" id="file-name" hidden></span>
+                </label>
+                <p class="status" id="upload-status" role="status" aria-live="polite"></p>
+            </form>
+
+            <form class="target-col" id="target-form" action="/set_target_column" method="post" hidden>
+                <label class="dropdown-label" for="targetColumnDropdown">What should the model predict?</label>
+                <select id="targetColumnDropdown" name="target_column" class="dropdown-content" required>
+                    <option value="" disabled selected>Choose a column</option>
                 </select>
-            </div>
-            <button type="submit" style="height: 40px;font-size: 15px;">Set Target Column</button>
-        </form>
+                <p class="hint" id="task-hint" aria-live="polite"></p>
+                <button type="submit" class="run-button" id="run-button" disabled>Run analysis</button>
+            </form>
+        </section>
 
-
-    </div>
-
-
-
-    </div>
-
-    <div id="loading-spinner">
-        <div class="spinner"></div>
-    </div>
-    <div class="second">
-        <div class='whitebox'>
-            <h1>Preprocessing steps to be handled.</h1>
-            <p style="font-size: 22px; margin: 0;">{{attributes}}</p>
-            <h1>Best Model Selected.</h1>
-            <p style="font-size: 22px; margin: 0;">{{model}}</p>
+        <div id="loading-spinner" class="loading" role="status" aria-live="polite" hidden>
+            <div class="spinner"></div>
+            <p>Analysing your data and writing the code. This can take a minute.</p>
         </div>
-        <div class='acculoss'>
-            <div id="accudiv">
-                <div id="accuracy" style="display: flex;justify-content: center; align-items: center; ">
-                    <span id="acc"
-                        style="padding-top:0px; margin-top:0px; color:#007173; font-size: 50px; font-weight: bold;">{{accuracy}}</span>
+
+        {% if has_results %}
+        <!-- Step 3: results, only rendered after an analysis has run -->
+        <section class="insights" id="results" aria-labelledby="results-title">
+            <header class="insights-head">
+                <h2 class="insights-title" id="results-title">Insights</h2>
+                <p class="insights-summary">
+                    {{ task_text }}, using {{ rows_used }} rows.
+                    The best model was <strong>{{ model }}</strong>.
+                </p>
+            </header>
+
+            <div class="metric-row">
+                {% for m in metrics %}
+                <div class="metric-tile">
+                    <span class="metric-label">{{ m.label }}</span>
+                    <span class="metric-value">{{ m.value }}</span>
+                    <p class="metric-note">{{ m.note }}</p>
                 </div>
-                <div id="acc">
-                    <span>Accuracy</span>
+                {% endfor %}
+            </div>
+
+            <div class="insights-grid">
+                <section class="insight-card" aria-labelledby="steps-title">
+                    <h3 id="steps-title">What was done to your data</h3>
+                    <ol class="steps-list">
+                        {% for step in steps %}
+                        <li>
+                            <span class="step-title">{{ step.title }}</span>
+                            <span class="step-detail">{{ step.detail }}</span>
+                            {% if step.columns %}<span class="step-columns">{{ step.columns }}</span>{% endif %}
+                        </li>
+                        {% else %}
+                        <li class="step-none">Nothing needed fixing: no gaps, extreme values, text columns or duplicates.</li>
+                        {% endfor %}
+                    </ol>
+                </section>
+
+                <section class="insight-card" aria-labelledby="compare-title">
+                    <h3 id="compare-title">How the models compared</h3>
+                    <p class="card-note">{{ metric_name }} on the test rows. Higher is better.</p>
+                    <ol class="bars">
+                        {% for c in comparison %}
+                        <li class="bar-row{% if c.best %} is-best{% endif %}">
+                            <span class="bar-label">{{ c.label }}{% if c.best %} <span class="badge">Best</span>{% endif %}</span>
+                            <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="--bar-width: {{ c.width }}%"></span></span>
+                            <span class="bar-value">{{ c.value }}</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </section>
+            </div>
+        </section>
+
+        <section id="codegenerator" aria-labelledby="code-title">
+            <h2 class="gencode" id="code-title">Code Generated by LLM</h2>
+            <div class="editor">
+                <div id="editorheader">
+                    <button type="button" class="copy-button" id="copy-button">Copy code</button>
+                </div>
+                <div id="editorbody">
+                    <pre class="language-python"><code class="language-python" id="generated-code">{{ formatted_code }}</code></pre>
                 </div>
             </div>
-            <div id="lossdiv">
-                <div id="loss" style="display: flex;justify-content: center; align-items: center; ">
-                    <span id="acc"
-                        style="padding-top:0px; margin-top:0px; color:#007173;; font-size: 50px; font-weight: bold;">{{loss}}</span>
-                </div>
-                <div id="lossy">
-                    <span>Loss</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section id="codegenerator">
-        <h2 class='gencode'>Code Generated by LLM</h2>
-        <div class="editor">
-            <div id="editorheader"></div>
-            <div id="editorbody" style="max-height: 100%; overflow: auto;">
-                <!-- Sample code block with Prism.js classes -->
-                <pre class="language-python">
-<code>
-{{formatted_code}}
-</code>
-                </pre>
-            </div>
-        </div>
-    </section>
-    <script src="{{url_for('static', filename='javascript.js')}}"></script>
-    <!-- Include Prism.js for syntax highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <!-- Include Prism.js language support for Python -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-   <script>
-        // Function to populate the dropdown menu with column names
-        function populateDropdown(columnNames) {
-            // Get the dropdown element by ID
-            var dropdown = document.getElementById('targetColumnDropdown');
+            <p class="again"><a href="#upload" data-scroll-to="upload">Analyse another dataset</a></p>
+        </section>
+        {% endif %}
+    </main>
 
-            // Clear existing options
-            dropdown.innerHTML = '';
-
-            // Create options for each column name and append them to the dropdown
-            columnNames.forEach(function (columnName) {
-                var option = document.createElement('option');
-                option.text = columnName;
-                dropdown.add(option);
-            });
-        }
-
-        // Make a request to the server to get column names when the page loads
-        window.onload = function () {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/generate_dropdown', true);
-            xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.onload = function () {
-                if (xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    var columnNames = response.column_names;
-
-                    // Populate the dropdown menu
-                    populateDropdown(columnNames);
-                }
-            };
-            xhr.send(new FormData(document.querySelector('.upl')));
-        };
-        function showLoadingSpinner() {
-            document.getElementById("loading-spinner").style.display = "block";
-        }
-
-        // Function to hide the loading spinner
-        function hideLoadingSpinner() {
-            document.getElementById("loading-spinner").style.display = "none";
-        }
-
-        // Function to handle form submission
-        function handleFormSubmission() {
-            // Show loading spinner when form is submitted
-            showLoadingSpinner();
-
-            // Optionally, you can perform additional actions here
-
-            return true; // Continue with form submission
-        }
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="{{ url_for('static', filename='javascript.js') }}"></script>
 </body>
 </html>
