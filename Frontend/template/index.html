@@ -15,14 +15,15 @@
 
     <header class="cinemadiv">
         <img class="cinemaimg" src="./static/img/OIG1-removebg-preview.png" alt="">
-        <h1 class="heading">ML Genie</h1>
+        <h1 class="heading">Auto ML</h1>
     </header>
 
     <main>
         <section class="examplediv">
             <div class="left-side">
-                <p class="text-head">ML Genie</p>
-                <p class="para">A solution for all your ML and Data Science related problems at one place</p>
+                <p class="text-head">Auto ML</p>
+                <p class="para">From CSV to trained model, with every step explained.
+Pick the column you want to predict. We clean the data, compare models, show you why the best one won, and generate the training code so you can run it yourself.</p>
                 <p class="example">Upload a dataset to see it in action.</p>
                 <button type="button" class="getstarted" data-scroll-to="upload">Get Started</button>
             </div>
@@ -140,7 +141,7 @@
 
                 <section class="insight-card" aria-labelledby="compare-title">
                     <h3 id="compare-title">How the models compared</h3>
-                    <p class="card-note">{{ metric_name }} on the test rows. Higher is better.</p>
+                    <p class="card-note">{{comparison_note}}</p>
                     <ol class="bars">
                         {% for c in comparison %}
                         <li class="bar-row{% if c.best %} is-best{% endif %}">
